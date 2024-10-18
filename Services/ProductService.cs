@@ -7,17 +7,20 @@ namespace ecommercenike_server.Services
     public class ProductService : IProductService
     {
         private readonly Supabase.Client _client;
+        private readonly FilterService _filterService;
 
-        public ProductService(Supabase.Client client)
+
+        public ProductService(Supabase.Client client, FilterService filterService)
         {
             _client = client;
+            _filterService = filterService;
         }
 
         public async Task<Product> CreateProduct(CreateProductRequest request)
         {
             var product = new Product
             {
-                Id = Guid.NewGuid(),  
+                Id = Guid.NewGuid(),
                 Name = request.Name,
                 Desc = request.Desc,
                 Category = request.Category,
@@ -32,7 +35,7 @@ namespace ecommercenike_server.Services
                 }).ToList(),
                 Rating = request.Rating,
                 Sizes = request.Sizes,
-               
+
                 ProductGallery = request.ProductGallery.Select(gal => new Image
                 {
                     Alt = gal.Alt,
@@ -49,13 +52,24 @@ namespace ecommercenike_server.Services
             return response.Models.First();
         }
 
-        public async Task<List<Product>> GetAllProducts()
+        public async Task<List<Product>> GetAllProducts(FilterRequest filters)
         {
-            var response = await _client.From<Product>().Get();
-            return response.Models;
+
+            if ((filters.Brand == null || filters.Brand.Length == 0) &&
+                (filters.SaleOffers == null || filters.SaleOffers.Length == 0) &&
+                (filters.PriceRange == null || filters.PriceRange.Length == 0) &&
+                (filters.Gender == null || filters.Gender.Length == 0))
+            {
+                var response = await _client.From<Product>().Get();
+                return response.Models;
+            }
+
+            var filteredresponse = await _filterService.GetFilteredProducts(filters);
+
+            return filteredresponse;
         }
 
-        public  async Task<Product> GetProductById(Guid id)  
+        public async Task<Product> GetProductById(Guid id)
         {
             var response = await _client.From<Product>()
                 .Where(n => n.Id == id)

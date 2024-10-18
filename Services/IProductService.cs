@@ -10,7 +10,7 @@ namespace ecommercenike_server.Services
       public interface IProductService
     {
         Task<Product> CreateProduct(CreateProductRequest request);
-        Task<List<Product>> GetAllProducts();
+        Task<List<Product>> GetAllProducts(FilterRequest filters);
         Task<Product> GetProductById(Guid id); 
         Task<List<Product>> GetProductsByCategory(string category);
         Task DeleteProduct(Guid id);  

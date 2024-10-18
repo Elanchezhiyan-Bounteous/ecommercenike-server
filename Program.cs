@@ -65,6 +65,7 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<FilterService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IFilterService, FilterService>();
 

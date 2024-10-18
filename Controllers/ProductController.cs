@@ -27,10 +27,10 @@ namespace furniro_server.Controllers
             return Ok(JsonConvert.SerializeObject(product));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        [HttpPost("filter")]
+        public async Task<IActionResult> GetAllProducts(FilterRequest filters)
         {
-            var products = await _productService.GetAllProducts();
+            var products = await _productService.GetAllProducts(filters);
 
             if (!products.Any())
             {
@@ -53,8 +53,8 @@ namespace furniro_server.Controllers
             return Ok(products);
         }
 
-        [HttpGet("{id:guid}")]  
-        public async Task<IActionResult> GetProduct(Guid id)  
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetProduct(Guid id)
         {
             var product = await _productService.GetProductById(id);
 
@@ -66,8 +66,8 @@ namespace furniro_server.Controllers
             return Ok(product);
         }
 
-        [HttpDelete("{id:guid}")]  
-        public async Task<IActionResult> DeleteProduct(Guid id)  
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteProduct(Guid id)
         {
             await _productService.DeleteProduct(id);
             return NoContent();
