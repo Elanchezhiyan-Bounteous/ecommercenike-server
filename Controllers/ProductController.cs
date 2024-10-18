@@ -53,8 +53,8 @@ namespace furniro_server.Controllers
             return Ok(products);
         }
 
-        [HttpGet("{id:guid}")]  // Change from long to guid
-        public async Task<IActionResult> GetProduct(Guid id)  // Use Guid instead of long
+        [HttpGet("{id:guid}")]  
+        public async Task<IActionResult> GetProduct(Guid id)  
         {
             var product = await _productService.GetProductById(id);
 
@@ -66,8 +66,8 @@ namespace furniro_server.Controllers
             return Ok(product);
         }
 
-        [HttpDelete("{id:guid}")]  // Change from long to guid
-        public async Task<IActionResult> DeleteProduct(Guid id)  // Use Guid instead of long
+        [HttpDelete("{id:guid}")]  
+        public async Task<IActionResult> DeleteProduct(Guid id)  
         {
             await _productService.DeleteProduct(id);
             return NoContent();

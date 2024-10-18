@@ -6,10 +6,10 @@ using ecommercenike_server.Models;
 
 namespace ecommercenike_server.Services
 {
-        public interface ICartService
+    public interface ICartService
     {
         Task<Cart> AddProductToCart(Guid userId, Guid productId, int quantity);
-        Task<IEnumerable<CartWithProductDetails>> GetAllProductsFromCart(Guid userId);
+        Task<CartWithProductDetails> GetAllProductsFromCart(Guid userId);
         Task RemoveProductFromCart(Guid userId, Guid productId);
     }
 }

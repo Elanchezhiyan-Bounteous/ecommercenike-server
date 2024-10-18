@@ -55,3 +55,4 @@ C:\Users\ElanchezhiyanVaradha\Documents\ecommercenike\ecommercenike-server\obj\D
 C:\Users\ElanchezhiyanVaradha\Documents\ecommercenike\ecommercenike-server\obj\Debug\net8.0\ecommercenike-server.pdb
 C:\Users\ElanchezhiyanVaradha\Documents\ecommercenike\ecommercenike-server\obj\Debug\net8.0\ecommercenike-server.genruntimeconfig.cache
 C:\Users\ElanchezhiyanVaradha\Documents\ecommercenike\ecommercenike-server\obj\Debug\net8.0\ref\ecommercenike-server.dll
+C:\Users\ElanchezhiyanVaradha\Documents\ecommercenike\ecommercenike-server\obj\Debug\net8.0\ecommercenike-server.sourcelink.json

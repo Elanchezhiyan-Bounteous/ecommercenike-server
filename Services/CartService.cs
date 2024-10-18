@@ -52,28 +52,28 @@ namespace ecommercenike_server.Services
             return cart;
         }
 
-        public async Task<IEnumerable<CartWithProductDetails>> GetAllProductsFromCart(Guid userId)
+        public async Task<CartWithProductDetails> GetAllProductsFromCart(Guid userId)
         {
-          
+
             var response = await _client.From<Cart>()
                                         .Where(c => c.UserId == userId)
                                         .Get();
 
             var cartList = response.Models;
 
-            // Check if there are any carts
-            if (cartList == null || !cartList.Any())
-                return Enumerable.Empty<CartWithProductDetails>();
 
-            var result = new List<CartWithProductDetails>();
+            if (cartList == null || !cartList.Any())
+                return new CartWithProductDetails();
+
+            var result = new CartWithProductDetails();
 
             foreach (var cart in cartList)
             {
-                var productDetails = new List<ProductDetail>(); // List to store product details
+                var productDetails = new List<ProductDetail>();
 
                 foreach (var productId in cart.Products.Keys)
                 {
-                    var product = await _productService.GetProductById(productId); // Fetch product by ID
+                    var product = await _productService.GetProductById(productId);
 
                     if (product != null)
                     {
@@ -82,18 +82,17 @@ namespace ecommercenike_server.Services
                             ProductId = product.Id,
                             Name = product.Name,
                             Price = product.Price,
-                            Quantity = cart.Products[productId]  // Assuming the quantity is in the cart.Products dictionary
+                            Quantity = cart.Products[productId]
                         });
                     }
                 }
 
-                // Add the cart with the populated product details to the result
-                result.Add(new CartWithProductDetails
+                result = new CartWithProductDetails
                 {
                     CartId = cart.Id,
                     UserId = cart.UserId,
                     Products = productDetails
-                });
+                };
             }
 
             return result;
@@ -121,10 +120,9 @@ public class ProductDetail
     public Guid ProductId { get; set; }
     public string Name { get; set; }
     public decimal Price { get; set; }
-    public int Quantity { get; set; }  // Assuming cart stores quantity for each product
+    public int Quantity { get; set; }
 }
 
-// Class to store the cart with product details
 public class CartWithProductDetails
 {
     public Guid CartId { get; set; }
