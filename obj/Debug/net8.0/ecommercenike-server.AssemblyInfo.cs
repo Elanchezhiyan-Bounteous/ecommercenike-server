@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ecommercenike-server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3dafdea027d392f9ed72ae4a30c0c766f6a1f160")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b1ab25cf93d90df18c0de3d535dd7de3551d41af")]
 [assembly: System.Reflection.AssemblyProductAttribute("ecommercenike-server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ecommercenike-server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
