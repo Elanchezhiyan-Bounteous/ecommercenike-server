@@ -83,10 +83,10 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseCors("AllowSpecificOrigin");
-app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
 app.UseHttpsRedirection();
-app.MapControllers().RequireAuthorization();
+app.MapControllers();
 app.Run();
 
 

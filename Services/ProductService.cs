@@ -54,19 +54,29 @@ namespace ecommercenike_server.Services
 
         public async Task<List<Product>> GetAllProducts(FilterRequest filters)
         {
+            var response = await _client.From<Product>().Select("*").Get();
+            var res = response.Models;
 
-            if ((filters.Brand == null || filters.Brand.Length == 0) &&
-                (filters.SaleOffers == null || filters.SaleOffers.Length == 0) &&
-                (filters.PriceRange == null || filters.PriceRange.Length == 0) &&
-                (filters.Gender == null || filters.Gender.Length == 0))
+
+            if ((filters.Brand != null || filters.Brand.Length >= 0) &&
+                (filters.SaleOffers != null || filters.SaleOffers.Length >= 0) &&
+                (filters.PriceRange != null || filters.PriceRange.Length >= 0) &&
+                (filters.Gender != null || filters.Gender.Length >= 0))
             {
-                var response = await _client.From<Product>().Get();
-                return response.Models;
+                res = await _filterService.GetFilteredProducts(filters);
             }
 
-            var filteredresponse = await _filterService.GetFilteredProducts(filters);
+            if (!string.IsNullOrWhiteSpace(filters.SortBy))
+            {
+                if (filters.SortBy.Equals("name", StringComparison.OrdinalIgnoreCase))
+                {
+                    res = filters.IsDescending ? res.OrderByDescending(p => p.Name).ToList() : res.OrderBy(p => p.Name).ToList();
 
-            return filteredresponse;
+                }
+            }
+
+            var skipNumber = (filters.PageNumber - 1) * filters.PageSize;
+            return res.Skip(skipNumber).Take(filters.PageSize).ToList();
         }
 
         public async Task<Product> GetProductById(Guid id)
