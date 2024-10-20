@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace furniro_server.Controllers
 {
@@ -27,10 +28,11 @@ namespace furniro_server.Controllers
             return Ok(JsonConvert.SerializeObject(product));
         }
 
+        [AllowAnonymous]
         [HttpPost("filter")]
-        public async Task<IActionResult> GetAllProducts(FilterRequest filters)
+        public async Task<IActionResult> GetAllProducts([FromBody] FilterRequest filters, [FromQuery] QueryRequest query)
         {
-            var products = await _productService.GetAllProducts(filters);
+            var products = await _productService.GetAllProducts(filters, query);
 
             if (!products.Any())
             {

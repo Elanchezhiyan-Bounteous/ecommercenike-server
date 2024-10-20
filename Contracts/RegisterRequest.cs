@@ -14,6 +14,6 @@ namespace ecommercenike_server.Contracts
 
         [Required]
         [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
-        public string Password { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;    
     }
 }

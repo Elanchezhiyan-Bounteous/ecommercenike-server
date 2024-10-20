@@ -1,6 +1,8 @@
 using ecommercenike_server.Models;
 using ecommercenike_server.Contracts;
 using System.Reflection.Metadata;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ecommercenike_server.Services
 {
@@ -52,31 +54,44 @@ namespace ecommercenike_server.Services
             return response.Models.First();
         }
 
-        public async Task<List<Product>> GetAllProducts(FilterRequest filters)
+        public async Task<List<Product>> GetAllProducts([
+            FromBody] FilterRequest filters, [FromQuery] QueryRequest query)
         {
             var response = await _client.From<Product>().Select("*").Get();
+
             var res = response.Models;
-
-
-            if ((filters.Brand != null || filters.Brand.Length >= 0) &&
-                (filters.SaleOffers != null || filters.SaleOffers.Length >= 0) &&
-                (filters.PriceRange != null || filters.PriceRange.Length >= 0) &&
-                (filters.Gender != null || filters.Gender.Length >= 0))
+            try
             {
-                res = await _filterService.GetFilteredProducts(filters);
-            }
 
-            if (!string.IsNullOrWhiteSpace(filters.SortBy))
-            {
-                if (filters.SortBy.Equals("name", StringComparison.OrdinalIgnoreCase))
+
+                if (filters.Brand.Length > 0 || filters.SaleOffers.Length > 0 || filters.PriceRange.Length > 0 || filters.Gender.Length > 0)
                 {
-                    res = filters.IsDescending ? res.OrderByDescending(p => p.Name).ToList() : res.OrderBy(p => p.Name).ToList();
-
+                    res = await _filterService.GetFilteredProducts(filters);
                 }
-            }
 
-            var skipNumber = (filters.PageNumber - 1) * filters.PageSize;
-            return res.Skip(skipNumber).Take(filters.PageSize).ToList();
+                if (!string.IsNullOrWhiteSpace(query.SortBy))
+                {
+                    if (query.SortBy.Equals("name", StringComparison.OrdinalIgnoreCase))
+                    {
+
+
+                        res = query.IsDescending ? res.OrderByDescending(p => p.Name).ToList() : res.OrderBy(p => p.Name).ToList();
+
+                    }
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("in Excepetion");
+                System.Console.WriteLine(e.Message);
+            }
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+            return res.Skip(skipNumber).Take(query.PageSize).ToList();
+
+
+
         }
 
         public async Task<Product> GetProductById(Guid id)
